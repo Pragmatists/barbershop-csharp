@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Xunit;
+using FluentAssertions;
 
 namespace BarberShop.Tests
 {
@@ -23,7 +24,7 @@ namespace BarberShop.Tests
 
       var responseString = await response.Content.ReadAsStringAsync();
 
-      Assert.Equal("", responseString);
+      responseString.Should().StartWith("[{\"ID\":");
     }
 
   }

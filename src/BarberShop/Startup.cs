@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BarberShop.Domain;
+using BarberShop.Infrastructure.InMemoryDataStore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +31,7 @@ namespace BarberShop
         {
             // Add framework services.
             services.AddMvc();
+            services.AddSingleton<IAppointmentsRepository, InMemoryAppointmentsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
