@@ -31,7 +31,12 @@ namespace BarberShop
         {
             // Add framework services.
             services.AddMvc();
-            services.AddSingleton<IAppointmentsRepository, InMemoryAppointmentsRepository>();
+            services.AddSingleton<IAppointmentsRepository, InMemoryAppointmentsRepository>(provider =>
+            {
+                var inMemoryAppointmentsRepository = new InMemoryAppointmentsRepository();
+                inMemoryAppointmentsRepository.Store(new Appointment { Client = "Janina Nowak", ID = 1, Time = new DateTime(2010, 3, 1, 12, 30, 0) });
+                return inMemoryAppointmentsRepository;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
