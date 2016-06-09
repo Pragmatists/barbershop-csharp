@@ -6,6 +6,7 @@ using BarberShop.Domain;
 using BarberShop.Infrastructure.InMemoryDataStore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -31,12 +32,22 @@ namespace BarberShop
         {
             // Add framework services.
             services.AddMvc();
-            services.AddSingleton<IAppointmentsRepository, InMemoryAppointmentsRepository>(provider =>
+            services.AddSingleton<IAppointmentsRepository, InMemoryAppointmentsRepository>(
+                provider => Seed(new InMemoryAppointmentsRepository()));
+
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=BarberShop.Dev;Trusted_Connection=True;";
+            services.AddDbContext<BarberShopContext>(options => options.UseSqlServer(connection));
+        }
+
+        private static InMemoryAppointmentsRepository Seed(InMemoryAppointmentsRepository inMemoryAppointmentsRepository)
+        {
+            inMemoryAppointmentsRepository.Store(new Appointment
             {
-                var inMemoryAppointmentsRepository = new InMemoryAppointmentsRepository();
-                inMemoryAppointmentsRepository.Store(new Appointment { Client = "Janina Nowak", ID = 1, Time = new DateTime(2010, 3, 1, 12, 30, 0) });
-                return inMemoryAppointmentsRepository;
+                Client = "Janina Nowak",
+                ID = 1,
+                Time = new DateTime(2010, 3, 1, 12, 30, 0)
             });
+            return inMemoryAppointmentsRepository;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,5 +58,14 @@ namespace BarberShop
 
             app.UseMvc();
         }
+    }
+
+    public class BarberShopContext : DbContext
+    {
+        public BarberShopContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        public DbSet<Appointment> Appointments { get; set; } 
     }
 }

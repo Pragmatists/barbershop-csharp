@@ -1,11 +1,11 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Xunit;
-using FluentAssertions;
 
-namespace BarberShop.Tests
+namespace BarberShop.Tests.Application
 {
   public class AppointmentsControllerTest
   {
