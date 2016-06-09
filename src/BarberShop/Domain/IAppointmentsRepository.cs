@@ -7,7 +7,7 @@ namespace BarberShop.Domain
     public interface IAppointmentsRepository
     {
         IEnumerable<Appointment> GetAll();
-        void Store(Appointment appointment);
+        Appointment Store(Appointment appointment);
         Appointment Load(int id);
     }
 }
